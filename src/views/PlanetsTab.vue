@@ -2,18 +2,16 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>People</ion-title>
+        <ion-title>Planets</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
       <div v-if="isReady">
-        <ion-list :key="person.url" v-for="person in people">
-          <ion-list-item @click="() => router.push(`/person/${encodeURIComponent(person.url)}`)">
+        <ion-list :key="planet.url" v-for="planet in planets">
+          <ion-list-item @click="() => router.push(`/planet/${encodeURIComponent(planet.url)}`)">
             <ion-item>
-              <ion-avatar slot="start">
-                <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
-              </ion-avatar>
-              <ion-label>{{ person.name }}</ion-label>
+              <ion-icon :icon="planet"/>
+              <ion-label>{{ planet.name }}</ion-label>
             </ion-item>
           </ion-list-item>
         </ion-list>
@@ -21,9 +19,6 @@
       <div v-else>
         <ion-list>
           <ion-item>
-            <ion-avatar slot="start">
-              <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
-            </ion-avatar>
             <ion-skeleton-text animated style="width: 65%"></ion-skeleton-text>
           </ion-item>
         </ion-list>
@@ -35,14 +30,15 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {useRouter} from "vue-router";
-import {usePeople} from "@/composables/usePeople";
+import {usePlanets} from "@/composables/usePlanets";
+import {planet} from "ionicons/icons";
 
 export default defineComponent({
-  name: 'PeoplePage',
+  name: 'PlanetsPage',
 
   data() {
     return {
-      people: [],
+      planets: [],
       isReady: false,
     }
   },
@@ -53,9 +49,9 @@ export default defineComponent({
   },
 
   mounted() {
-    const {getPeople} = usePeople();
-    getPeople().then((result) => {
-      this.people = result.results
+    const {getPlanets} = usePlanets();
+    getPlanets().then((result) => {
+      this.planets = result.results
       this.isReady = true
     })
   },

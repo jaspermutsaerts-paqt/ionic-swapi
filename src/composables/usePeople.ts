@@ -1,31 +1,15 @@
-import {ref, onMounted, watch} from "vue";
 import axios from "axios";
+import {ResultSet} from "@/types/ResultSet";
+import {Person} from "@/types/Person";
 
-export interface Person {
-    name: string;
-    url: string;
-    birth_year: string;
-    films: string[]
-
-}
-
-
-
-export interface ResultSet {
-    count: number;
-    previous: string | null;
-    next: string | null;
-    results: Person[];
-}
 
 export function usePeople() {
     const API = 'https://swapi.dev/api'
 
-
-    const getPeople = async (): Promise<ResultSet> => {
+    const getPeople = async (): Promise<ResultSet<Person>> => {
         const url = `${API}/people`
-        const response = await axios.get<ResultSet>(url)
-        return response.data as ResultSet
+        const response = await axios.get<ResultSet<Person>>(url)
+        return response.data as ResultSet<Person>
     }
 
     const getPerson = async (url: string): Promise<Person> => {
