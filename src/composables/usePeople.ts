@@ -3,8 +3,12 @@ import axios from "axios";
 
 export interface Person {
     name: string;
+    url: string;
+    birth_year: string;
     films: string[]
+
 }
+
 
 
 export interface ResultSet {
@@ -18,14 +22,21 @@ export function usePeople() {
     const API = 'https://swapi.dev/api'
 
 
-    const getPeople = async(): Promise<ResultSet> => {
+    const getPeople = async (): Promise<ResultSet> => {
         const url = `${API}/people`
         const response = await axios.get<ResultSet>(url)
         return response.data as ResultSet
     }
 
+    const getPerson = async (url: string): Promise<Person> => {
+        const response = await axios.get<Person>(url)
+        console.log(response.data)
+        return response.data as Person
+    }
+
     return {
         getPeople,
+        getPerson,
     }
 
 }

@@ -6,15 +6,14 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-list :key="person" v-for="person in people" >
-        <ion-list-item>
+      <ion-list :key="person.url" v-for="person in people">
+        <ion-list-item @click="() => router.push(`/person/${encodeURIComponent(person.url)}`)">
           <ion-item>
             <ion-avatar slot="start">
               <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
             </ion-avatar>
             <ion-label>{{ person.name }}</ion-label>
           </ion-item>
-
         </ion-list-item>
       </ion-list>
 
@@ -23,14 +22,20 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, watch} from 'vue';
-import {Person, usePeople} from "@/composables/usePeople";
+import {defineComponent} from 'vue';
+import {useRouter} from "vue-router";
+import {usePeople} from "@/composables/usePeople";
 
 export default defineComponent({
   name: 'PeoplePage',
 
   data() {
     return {people: []}
+  },
+
+  setup() {
+    const router = useRouter();
+    return {router};
   },
 
   mounted() {

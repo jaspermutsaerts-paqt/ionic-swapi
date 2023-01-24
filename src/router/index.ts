@@ -5,15 +5,11 @@ import TabsPage from '../views/TabsPage.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/tabs/people'
-  },
-  {
-    path: '/tabs/',
     component: TabsPage,
     children: [
       {
         path: '',
-        redirect: '/tabs/people'
+        redirect: '/people'
       },
       {
         path: 'people',
@@ -24,7 +20,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Tab2Page.vue')
       },
     ]
-  }
+  },
+  {
+    path: '/person/:url',
+    component: () => import('@/views/person/PersonDetail.vue')
+  },
 ]
 
 const router = createRouter({
