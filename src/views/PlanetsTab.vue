@@ -31,14 +31,14 @@
 import {defineComponent} from 'vue';
 import {useRouter} from "vue-router";
 import {usePlanets} from "@/composables/usePlanets";
-import {planet} from "ionicons/icons";
+import {Planet} from "@/types/Planet";
 
 export default defineComponent({
   name: 'PlanetsPage',
 
   data() {
     return {
-      planets: [],
+      planets: [] as Planet[],
       isReady: false,
     }
   },

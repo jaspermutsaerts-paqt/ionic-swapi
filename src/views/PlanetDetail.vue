@@ -1,0 +1,46 @@
+<template>
+  <ion-page>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{ planet.name }}</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content :fullscreen="true">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>{{ planet.name }}</ion-card-title>
+          <ion-card-subtitle>Population: {{ Number(planet.population).toLocaleString() }}</ion-card-subtitle>
+          <ion-card-subtitle>Diameter: {{ Number(planet.diameter).toLocaleString() }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-content>
+  </ion-page>
+</template>
+
+<script>
+import {useRoute} from 'vue-router';
+import {usePlanets} from '@/composables/usePlanets';
+
+export default {
+  name: "PlanetDetail",
+
+  data() {
+    return {planet: []}
+  },
+
+  setup() {
+    const route = useRoute();
+    const url = decodeURIComponent(route.params.url)
+    return {url};
+  },
+
+  mounted() {
+    const {getPlanet} = usePlanets();
+    getPlanet(this.url).then((planet) => this.planet = planet)
+  },
+}
+</script>
+
+<style scoped>
+
+</style>
