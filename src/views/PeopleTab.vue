@@ -36,13 +36,14 @@
 import {defineComponent} from 'vue';
 import {useRouter} from "vue-router";
 import {usePeople} from "@/composables/usePeople";
+import {Person} from "@/types/Person";
 
 export default defineComponent({
   name: 'PeoplePage',
 
   data() {
     return {
-      people: [],
+      people: [] as Person[],
       isReady: false,
     }
   },
