@@ -8,7 +8,7 @@
     <ion-content :fullscreen="true">
       <div v-if="isReady">
         <ion-list :key="planet.url" v-for="planet in planets">
-          <ion-item @click="() => router.push(`/planet/${encodeURIComponent(planet.url)}`)">
+          <ion-item @click="() => router.push(`/planets/${encodeURIComponent(planet.url)}`)">
             <ion-avatar slot="start">
               <ion-icon :icon="planetIcon" size="large"></ion-icon>
             </ion-avatar>
