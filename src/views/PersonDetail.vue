@@ -8,14 +8,22 @@
         <ion-title>{{ person.name }}</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
+    <ion-content align="center">
       <ion-card>
         <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
         <ion-card-header>
           <ion-card-title>{{ person.name }}</ion-card-title>
           <ion-card-subtitle>Birth year: {{ person.birth_year }}</ion-card-subtitle>
         </ion-card-header>
+        <ion-card-content v-if="person.homeworld">
+          <ion-button @click="() => router.push(`/planets/${encodeURIComponent(person.homeworld)}`)">Visit home
+            planet
+          </ion-button>
+        </ion-card-content>
+
       </ion-card>
+
+
     </ion-content>
   </ion-page>
 </template>
@@ -23,8 +31,10 @@
 <script>
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonCard,
+  IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
@@ -34,18 +44,20 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/vue';
-import {useRoute} from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import {usePeople} from '@/composables/usePeople';
 
 export default {
   components: {
     IonPage,
+    IonButton,
     IonButtons,
     IonBackButton,
     IonCard,
     IonCardHeader,
     IonCardTitle,
     IonCardSubtitle,
+    IonCardContent,
     IonContent,
     IonHeader,
     IonTitle,
@@ -60,8 +72,9 @@ export default {
 
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const url = decodeURIComponent(route.params.url)
-    return {url};
+    return {router, url};
   },
 
   mounted() {

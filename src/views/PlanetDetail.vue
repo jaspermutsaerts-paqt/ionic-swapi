@@ -12,8 +12,8 @@
       <ion-card>
         <ion-card-header>
           <ion-card-title>{{ planet.name }}</ion-card-title>
-          <ion-card-subtitle>Population: {{ Number(planet.population).toLocaleString() }}</ion-card-subtitle>
-          <ion-card-subtitle>Diameter: {{ Number(planet.diameter).toLocaleString() }}</ion-card-subtitle>
+          <ion-card-subtitle>Population: {{ isNaN(planet.population) ? planet.population : Number(planet.population).toLocaleString()}}</ion-card-subtitle>
+          <ion-card-subtitle>Diameter: {{ Number(planet.diameter).toLocaleString() }} km</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-content>
