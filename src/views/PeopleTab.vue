@@ -8,14 +8,12 @@
     <ion-content :fullscreen="true">
       <div v-if="isReady">
         <ion-list :key="person.url" v-for="person in people">
-          <ion-list-item @click="() => router.push(`/person/${encodeURIComponent(person.url)}`)">
-            <ion-item>
-              <ion-avatar slot="start">
-                <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
-              </ion-avatar>
-              <ion-label>{{ person.name }}</ion-label>
-            </ion-item>
-          </ion-list-item>
+          <ion-item @click="() => router.push(`/person/${encodeURIComponent(person.url)}`)">
+            <ion-avatar slot="start">
+              <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
+            </ion-avatar>
+            <ion-label>{{ person.name }}</ion-label>
+          </ion-item>
         </ion-list>
       </div>
       <div v-else>
@@ -33,12 +31,35 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {useRouter} from "vue-router";
+import {useRouter} from "vue-router"
 import {usePeople} from "@/composables/usePeople";
 import {Person} from "@/types/Person";
+import {
+  IonAvatar,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonPage,
+  IonSkeletonText,
+  IonTitle,
+  IonToolbar
+} from "@ionic/vue";
+import {defineComponent} from "vue";
 
 export default defineComponent({
+  components: {
+    IonAvatar,
+    IonLabel,
+    IonItem,
+    IonList,
+    IonSkeletonText,
+    IonContent,
+    IonHeader,
+    IonPage, IonTitle, IonToolbar
+  },
+
   name: 'PeoplePage',
 
   data() {
@@ -60,7 +81,5 @@ export default defineComponent({
       this.isReady = true
     })
   },
-
-
 })
 </script>

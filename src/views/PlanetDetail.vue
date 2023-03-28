@@ -18,10 +18,36 @@
 </template>
 
 <script>
+import {
+  IonBackButton,
+  IonButtons,
+  IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar
+} from '@ionic/vue';
 import {useRoute} from 'vue-router';
 import {usePlanets} from '@/composables/usePlanets';
 
 export default {
+  components: {
+    IonPage,
+    IonButtons,
+    IonBackButton,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar
+  },
   name: "PlanetDetail",
 
   data() {

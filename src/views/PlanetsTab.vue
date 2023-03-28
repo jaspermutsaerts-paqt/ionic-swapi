@@ -8,12 +8,12 @@
     <ion-content :fullscreen="true">
       <div v-if="isReady">
         <ion-list :key="planet.url" v-for="planet in planets">
-          <ion-list-item @click="() => router.push(`/planet/${encodeURIComponent(planet.url)}`)">
-            <ion-item>
-              <ion-icon :icon="planet"/>
-              <ion-label>{{ planet.name }}</ion-label>
-            </ion-item>
-          </ion-list-item>
+          <ion-item @click="() => router.push(`/planet/${encodeURIComponent(planet.url)}`)">
+            <ion-avatar slot="start">
+              <ion-icon :icon="planetIcon" size="large"></ion-icon>
+            </ion-avatar>
+            <ion-label>{{ planet.name }}</ion-label>
+          </ion-item>
         </ion-list>
       </div>
       <div v-else>
@@ -28,12 +28,40 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {defineComponent} from "vue";
 import {useRouter} from "vue-router";
 import {usePlanets} from "@/composables/usePlanets";
 import {Planet} from "@/types/Planet";
+import {planet as planetIcon} from "ionicons/icons";
+import {
+  IonAvatar,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonPage,
+  IonSkeletonText,
+  IonTitle,
+  IonToolbar
+} from "@ionic/vue";
+
 
 export default defineComponent({
+  components: {
+    IonAvatar,
+    IonPage,
+    IonIcon,
+    IonLabel,
+    IonList,
+    IonItem,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonSkeletonText,
+  },
   name: 'PlanetsPage',
 
   data() {
@@ -45,7 +73,7 @@ export default defineComponent({
 
   setup() {
     const router = useRouter();
-    return {router};
+    return {router, planetIcon};
   },
 
   mounted() {
