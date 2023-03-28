@@ -78,8 +78,9 @@ export default {
   },
 
   mounted() {
-    const {getPerson} = usePeople();
+    const {getPerson, findPerson} = usePeople();
     getPerson(this.url).then((person) => this.person = person)
+    // findPerson('Luke Skywalker').then((person) => console.log('Found', person))
   },
 }
 </script>

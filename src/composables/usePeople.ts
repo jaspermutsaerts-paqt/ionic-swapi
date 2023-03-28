@@ -18,9 +18,27 @@ export function usePeople() {
         return response.data as Person
     }
 
+    const findPerson = async (name: string): Promise<null | Person> => {
+        const url = `${API}/people/?search=${name}`
+        const response = await axios.get<ResultSet<Person>>(url)
+        const result = response.data as ResultSet<Person>
+
+        if (result.count === 1) {
+            return result.results[0]
+        }
+
+        if (result.count > 1) {
+            return Promise.reject(`Too many results for ${name}`)
+        }
+
+        return Promise.reject(`No results for ${name}`)
+
+    }
+
     return {
         getPeople,
         getPerson,
+        findPerson,
     }
 
 }
