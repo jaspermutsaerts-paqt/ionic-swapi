@@ -1,7 +1,6 @@
-import axios from "axios";
-import {ResultSet} from "@/types/ResultSet";
-import {Person} from "@/types/Person";
-
+import axios from 'axios'
+import { ResultSet } from '@/types/ResultSet'
+import { Person } from '@/types/Person'
 
 export function usePeople() {
     const API = 'https://swapi.dev/api'
@@ -31,7 +30,6 @@ export function usePeople() {
         }
 
         return Promise.reject(`No results for ${name}`)
-
     }
 
     return {
@@ -39,5 +37,4 @@ export function usePeople() {
         getPerson,
         findPerson,
     }
-
 }

@@ -1,11 +1,9 @@
-import axios from "axios";
-import {ResultSet} from "@/types/ResultSet";
-import {Planet} from "@/types/Planet";
-
+import axios from 'axios'
+import { ResultSet } from '@/types/ResultSet'
+import { Planet } from '@/types/Planet'
 
 export function usePlanets() {
     const API = 'https://swapi.dev/api'
-
 
     const getPlanets = async (): Promise<ResultSet<Planet>> => {
         const url = `${API}/planets`
@@ -22,5 +20,4 @@ export function usePlanets() {
         getPlanets,
         getPlanet,
     }
-
 }

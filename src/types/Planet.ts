@@ -1,6 +1,5 @@
 export interface Planet {
-    name: string;
-    population: number;
-    diameter: number;
-
+    name: string
+    population: number
+    diameter: number
 }
