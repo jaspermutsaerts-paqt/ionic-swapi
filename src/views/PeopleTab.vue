@@ -18,6 +18,9 @@
                         <ion-label>{{ person.name }}</ion-label>
                     </ion-item>
                 </ion-list>
+                <ion-infinite-scroll position="top" @ionInfinite="onInfiniteScroll">
+                    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+                </ion-infinite-scroll>
             </div>
             <div v-else>
                 <ion-list>
@@ -50,6 +53,9 @@ import {
     IonSkeletonText,
     IonTitle,
     IonToolbar,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    InfiniteScrollCustomEvent,
 } from '@ionic/vue'
 import { defineComponent } from 'vue'
 
@@ -65,6 +71,8 @@ export default defineComponent({
         IonPage,
         IonTitle,
         IonToolbar,
+        IonInfiniteScroll,
+        IonInfiniteScrollContent,
     },
 
     name: 'PeoplePage',
@@ -72,6 +80,7 @@ export default defineComponent({
     data() {
         return {
             people: [] as Person[],
+            next: null as string | null,
             isReady: false,
         }
     },
@@ -81,7 +90,29 @@ export default defineComponent({
         getPeople().then((result) => {
             this.people = result.results
             this.isReady = true
+            this.next = result.next
         })
+    },
+
+    methods: {
+        onInfiniteScroll: function (event: InfiniteScrollCustomEvent) {
+            this.isReady = false
+
+            if (this.next === null) {
+                event.target.complete()
+                return
+            }
+
+            const { getPeople } = usePeople()
+
+            getPeople(this.next).then((result) => {
+                this.people = this.people.concat(result.results)
+                this.isReady = true
+                this.next = result.next
+                console.log('new result', this.people.length, 'next:' + this.next)
+                event.target.complete()
+            })
+        },
     },
 })
 </script>
