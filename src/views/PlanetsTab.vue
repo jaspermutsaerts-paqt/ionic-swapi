@@ -8,7 +8,7 @@
     <ion-content :fullscreen="true">
       <div v-if="isReady">
         <ion-list :key="planet.url" v-for="planet in planets">
-          <ion-item @click="() => router.push(`/planets/${encodeURIComponent(planet.url)}`)">
+          <ion-item :router-link="`/planets/${encodeURIComponent(planet.url)}`">
             <ion-avatar slot="start">
               <ion-icon :icon="planetIcon" size="large"></ion-icon>
             </ion-avatar>
@@ -29,7 +29,6 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useRouter} from "vue-router";
 import {usePlanets} from "@/composables/usePlanets";
 import {Planet} from "@/types/Planet";
 import {planet as planetIcon} from "ionicons/icons";
@@ -72,8 +71,7 @@ export default defineComponent({
   },
 
   setup() {
-    const router = useRouter();
-    return {router, planetIcon};
+    return {planetIcon};
   },
 
   mounted() {

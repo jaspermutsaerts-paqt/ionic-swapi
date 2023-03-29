@@ -14,7 +14,6 @@ export function usePeople() {
 
     const getPerson = async (url: string): Promise<Person> => {
         const response = await axios.get<Person>(url)
-        console.log(response.data)
         return response.data as Person
     }
 

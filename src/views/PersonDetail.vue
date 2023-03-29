@@ -16,8 +16,8 @@
           <ion-card-subtitle>Birth year: {{ person.birth_year }}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content v-if="person.homeworld">
-          <ion-button @click="() => router.push(`/planets/${encodeURIComponent(person.homeworld)}`)">Visit home
-            planet
+          <ion-button :router-link="`/planets/${encodeURIComponent(person.homeworld)}`">
+            Visit home planet
           </ion-button>
         </ion-card-content>
 
@@ -44,7 +44,7 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/vue';
-import {useRoute, useRouter} from 'vue-router';
+import {useRoute} from 'vue-router';
 import {usePeople} from '@/composables/usePeople';
 
 export default {
@@ -72,9 +72,8 @@ export default {
 
   setup() {
     const route = useRoute();
-    const router = useRouter();
     const url = decodeURIComponent(route.params.url)
-    return {router, url};
+    return {url};
   },
 
   mounted() {
@@ -84,7 +83,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-
-</style>

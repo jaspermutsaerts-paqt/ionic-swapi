@@ -8,7 +8,7 @@
     <ion-content :fullscreen="true">
       <div v-if="isReady">
         <ion-list :key="person.url" v-for="person in people">
-          <ion-item @click="() => router.push(`/people/${encodeURIComponent(person.url)}`)">
+          <ion-item :router-link="`/people/${encodeURIComponent(person.url)}`">
             <ion-avatar slot="start">
               <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
             </ion-avatar>
@@ -31,7 +31,6 @@
 </template>
 
 <script lang="ts">
-import {useRouter} from "vue-router"
 import {usePeople} from "@/composables/usePeople";
 import {Person} from "@/types/Person";
 import {
@@ -67,11 +66,6 @@ export default defineComponent({
       people: [] as Person[],
       isReady: false,
     }
-  },
-
-  setup() {
-    const router = useRouter();
-    return {router};
   },
 
   mounted() {
