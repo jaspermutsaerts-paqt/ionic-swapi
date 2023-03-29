@@ -5,8 +5,8 @@ import { Person } from '@/types/Person'
 export function usePeople() {
     const API = 'https://swapi.dev/api'
 
-    const getPeople = async (): Promise<ResultSet<Person>> => {
-        const url = `${API}/people`
+    const getPeople = async (url: string | null = null): Promise<ResultSet<Person>> => {
+        url ??= `${API}/people`
         const response = await axios.get<ResultSet<Person>>(url)
         return response.data as ResultSet<Person>
     }
