@@ -18,7 +18,7 @@
                         <ion-label>{{ person.name }}</ion-label>
                     </ion-item>
                 </ion-list>
-                <ion-infinite-scroll position="top" @ionInfinite="onInfiniteScroll">
+                <ion-infinite-scroll position="bottom" @ionInfinite="onInfiniteScroll">
                     <ion-infinite-scroll-content></ion-infinite-scroll-content>
                 </ion-infinite-scroll>
             </div>
@@ -43,9 +43,12 @@
 import { useSwapi } from '@/composables/useSwapi'
 import { Person } from '@/types/Person'
 import {
+    InfiniteScrollCustomEvent,
     IonAvatar,
     IonContent,
     IonHeader,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     IonItem,
     IonLabel,
     IonList,
@@ -53,11 +56,9 @@ import {
     IonSkeletonText,
     IonTitle,
     IonToolbar,
-    IonInfiniteScroll,
-    IonInfiniteScrollContent,
-    InfiniteScrollCustomEvent,
 } from '@ionic/vue'
 import { defineComponent } from 'vue'
+import { Page } from '@/types/Page'
 
 export default defineComponent({
     components: {
@@ -86,30 +87,26 @@ export default defineComponent({
     },
 
     mounted() {
-        const { getPeople } = useSwapi()
-        getPeople().then((result) => {
-            this.people = result.results
-            this.isReady = true
-            this.next = result.next
-        })
+        const { getPeoplePage } = useSwapi()
+        getPeoplePage().then(this.onRetrievedPage)
     },
 
     methods: {
+        onRetrievedPage: function (page: Page<Person>) {
+            this.people = this.people.concat(page.items)
+            this.isReady = true
+            this.next = page.next
+        },
         onInfiniteScroll: function (event: InfiniteScrollCustomEvent) {
-            this.isReady = false
-
             if (this.next === null) {
                 event.target.complete()
                 return
             }
 
-            const { getPeople } = useSwapi()
+            const { getPeoplePage } = useSwapi()
 
-            getPeople(this.next).then((result) => {
-                this.people = this.people.concat(result.results)
-                this.isReady = true
-                this.next = result.next
-                console.log('new result', this.people.length, 'next:' + this.next)
+            getPeoplePage(this.next).then((page) => {
+                this.onRetrievedPage(page)
                 event.target.complete()
             })
         },
