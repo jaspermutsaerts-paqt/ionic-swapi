@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { usePlanets } from '@/composables/usePlanets'
+import { useSwapi } from '@/composables/useSwapi'
 import { Planet } from '@/types/Planet'
 import { planet as planetIcon } from 'ionicons/icons'
 import {
@@ -74,7 +74,7 @@ export default defineComponent({
     },
 
     mounted() {
-        const { getPlanets } = usePlanets()
+        const { getPlanets } = useSwapi()
         getPlanets().then((result) => {
             this.planets = result.results
             this.isReady = true

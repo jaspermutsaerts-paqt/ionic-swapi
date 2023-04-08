@@ -42,7 +42,7 @@ import {
     IonToolbar,
 } from '@ionic/vue'
 import { useRoute } from 'vue-router'
-import { usePeople } from '@/composables/usePeople'
+import { useSwapi } from '@/composables/useSwapi'
 
 export default {
     components: {
@@ -74,7 +74,7 @@ export default {
     },
 
     mounted() {
-        const { getPerson, findPerson } = usePeople()
+        const { getPerson, findPerson } = useSwapi()
         getPerson(this.url).then((person) => (this.person = person))
         // findPerson('Luke Skywalker').then((person) => console.log('Found', person))
     },

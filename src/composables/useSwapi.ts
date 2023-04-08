@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { ResultSet } from '@/types/ResultSet'
 import { Person } from '@/types/Person'
+import { Planet } from '@/types/Planet'
 
-export function usePeople() {
+export function useSwapi() {
     const API = 'https://swapi.dev/api'
 
     const getPeople = async (url: string | null = null): Promise<ResultSet<Person>> => {
@@ -32,9 +33,22 @@ export function usePeople() {
         return Promise.reject(`No results for ${name}`)
     }
 
+    const getPlanets = async (): Promise<ResultSet<Planet>> => {
+        const url = `${API}/planets`
+        const response = await axios.get<ResultSet<Planet>>(url)
+        return response.data as ResultSet<Planet>
+    }
+
+    const getPlanet = async (url: string): Promise<Planet> => {
+        const response = await axios.get<Planet>(url)
+        return response.data as Planet
+    }
+
     return {
         getPeople,
         getPerson,
         findPerson,
+        getPlanets,
+        getPlanet,
     }
 }

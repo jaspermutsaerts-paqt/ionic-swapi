@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { usePeople } from '@/composables/usePeople'
+import { useSwapi } from '@/composables/useSwapi'
 import { Person } from '@/types/Person'
 import {
     IonAvatar,
@@ -86,7 +86,7 @@ export default defineComponent({
     },
 
     mounted() {
-        const { getPeople } = usePeople()
+        const { getPeople } = useSwapi()
         getPeople().then((result) => {
             this.people = result.results
             this.isReady = true
@@ -103,7 +103,7 @@ export default defineComponent({
                 return
             }
 
-            const { getPeople } = usePeople()
+            const { getPeople } = useSwapi()
 
             getPeople(this.next).then((result) => {
                 this.people = this.people.concat(result.results)

@@ -40,7 +40,7 @@ import {
     IonToolbar,
 } from '@ionic/vue'
 import { useRoute } from 'vue-router'
-import { usePlanets } from '@/composables/usePlanets'
+import { getPlanet, useSwapi } from '@/composables/useSwapi'
 
 export default {
     components: {
@@ -69,7 +69,7 @@ export default {
     },
 
     mounted() {
-        const { getPlanet } = usePlanets()
+        const { getPlanet } = useSwapi()
         getPlanet(this.url).then((planet) => (this.planet = planet))
     },
 }
