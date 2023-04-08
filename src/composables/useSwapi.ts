@@ -2,6 +2,7 @@ import axios from 'axios'
 import { ResultSet } from '@/types/ResultSet'
 import { Person } from '@/types/Person'
 import { Planet } from '@/types/Planet'
+import { Page } from '@/types/Page'
 
 export function useSwapi() {
     const API = 'https://swapi.dev/api'
@@ -33,6 +34,11 @@ export function useSwapi() {
         return Promise.reject(`No results for ${name}`)
     }
 
+    const getPeoplePage = async (url: string | null = null): Promise<Page<Person>> => {
+        const start = await getPeople(url)
+        return getPageOfSize(start, 25)
+    }
+
     const getPlanets = async (): Promise<ResultSet<Planet>> => {
         const url = `${API}/planets`
         const response = await axios.get<ResultSet<Planet>>(url)
@@ -44,8 +50,26 @@ export function useSwapi() {
         return response.data as Planet
     }
 
+    const getPageOfSize = async <Type>(
+        current: ResultSet<Type>,
+        size: number,
+        items: Type[] = []
+    ): Promise<Page<Type>> => {
+        items = items.concat(current.results)
+
+        if (!current.next || items.length >= size) {
+            return { items, next: current.next } as Page<Type>
+        }
+
+        return axios.get<Type>(current.next).then((result) => {
+            const next = result.data as ResultSet<Type>
+            return getPageOfSize(next, size, items)
+        })
+    }
+
     return {
         getPeople,
+        getPeoplePage,
         getPerson,
         findPerson,
         getPlanets,
