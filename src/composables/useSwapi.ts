@@ -39,8 +39,8 @@ export function useSwapi() {
         return getPageOfSize(start, 25)
     }
 
-    const getPlanets = async (): Promise<ResultSet<Planet>> => {
-        const url = `${API}/planets`
+    const getPlanets = async (url: string | null = null): Promise<ResultSet<Planet>> => {
+        url ??= `${API}/planets`
         const response = await axios.get<ResultSet<Planet>>(url)
         return response.data as ResultSet<Planet>
     }
@@ -48,6 +48,11 @@ export function useSwapi() {
     const getPlanet = async (url: string): Promise<Planet> => {
         const response = await axios.get<Planet>(url)
         return response.data as Planet
+    }
+
+    const getPlanetsPage = async (url: string | null = null): Promise<Page<Planet>> => {
+        const start = await getPlanets(url)
+        return getPageOfSize(start, 25)
     }
 
     const getPageOfSize = async <Type>(
@@ -68,11 +73,10 @@ export function useSwapi() {
     }
 
     return {
-        getPeople,
         getPeoplePage,
+        getPlanetsPage,
         getPerson,
         findPerson,
-        getPlanets,
         getPlanet,
     }
 }

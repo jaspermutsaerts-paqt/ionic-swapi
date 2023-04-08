@@ -15,6 +15,9 @@
                         <ion-label>{{ planet.name }}</ion-label>
                     </ion-item>
                 </ion-list>
+                <ion-infinite-scroll position="bottom" @ionInfinite="onInfiniteScroll">
+                    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+                </ion-infinite-scroll>
             </div>
             <div v-else>
                 <ion-list>
@@ -28,16 +31,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { useSwapi } from '@/composables/useSwapi'
 import { Planet } from '@/types/Planet'
 import { planet as planetIcon } from 'ionicons/icons'
 import {
+    InfiniteScrollCustomEvent,
     IonAvatar,
     IonContent,
     IonHeader,
-    IonIcon,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     IonItem,
+    IonIcon,
     IonLabel,
     IonList,
     IonPage,
@@ -45,26 +50,32 @@ import {
     IonTitle,
     IonToolbar,
 } from '@ionic/vue'
+import { defineComponent } from 'vue'
+import { Page } from '@/types/Page'
 
 export default defineComponent({
     components: {
         IonAvatar,
-        IonPage,
         IonIcon,
         IonLabel,
-        IonList,
         IonItem,
+        IonList,
+        IonSkeletonText,
         IonContent,
         IonHeader,
+        IonPage,
         IonTitle,
         IonToolbar,
-        IonSkeletonText,
+        IonInfiniteScroll,
+        IonInfiniteScrollContent,
     },
+
     name: 'PlanetsPage',
 
     data() {
         return {
             planets: [] as Planet[],
+            next: null as string | null,
             isReady: false,
         }
     },
@@ -74,11 +85,29 @@ export default defineComponent({
     },
 
     mounted() {
-        const { getPlanets } = useSwapi()
-        getPlanets().then((result) => {
-            this.planets = result.results
+        const { getPlanetsPage } = useSwapi()
+        getPlanetsPage().then(this.onRetrievedPage)
+    },
+
+    methods: {
+        onRetrievedPage: function (page: Page<Planet>) {
+            this.planets = this.planets.concat(page.items)
             this.isReady = true
-        })
+            this.next = page.next
+        },
+        onInfiniteScroll: function (event: InfiniteScrollCustomEvent) {
+            if (this.next === null) {
+                event.target.complete()
+                return
+            }
+
+            const { getPlanetsPage } = useSwapi()
+
+            getPlanetsPage(this.next).then((page) => {
+                this.onRetrievedPage(page)
+                event.target.complete()
+            })
+        },
     },
 })
 </script>
