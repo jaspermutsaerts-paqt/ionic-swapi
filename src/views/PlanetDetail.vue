@@ -40,7 +40,7 @@ import {
     IonToolbar,
 } from '@ionic/vue'
 import { useRoute } from 'vue-router'
-import { getPlanet, useSwapi } from '@/composables/useSwapi'
+import { useSwapi } from '@/composables/useSwapi'
 
 export default {
     components: {

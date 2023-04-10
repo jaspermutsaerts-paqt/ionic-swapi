@@ -6,6 +6,14 @@
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
+            <ion-header>
+                <ion-searchbar
+                    :debounce="1000"
+                    show-cancel-button="focus"
+                    @ionChange="onSearch"
+                    @ionCancel="onCancelSearch"
+                ></ion-searchbar>
+            </ion-header>
             <div v-if="isReady">
                 <ion-list :key="planet.url" v-for="planet in planets">
                     <ion-item :router-link="`/planets/${encodeURIComponent(planet.url)}`">
@@ -15,6 +23,7 @@
                         <ion-label>{{ planet.name }}</ion-label>
                     </ion-item>
                 </ion-list>
+                <ion-text v-if="planets.length == 0" class="ion-padding-horizontal"> No results </ion-text>
                 <ion-infinite-scroll position="bottom" @ionInfinite="onInfiniteScroll">
                     <ion-infinite-scroll-content></ion-infinite-scroll-content>
                 </ion-infinite-scroll>
@@ -46,6 +55,8 @@ import {
     IonLabel,
     IonList,
     IonPage,
+    IonText,
+    IonSearchbar,
     IonSkeletonText,
     IonTitle,
     IonToolbar,
@@ -63,7 +74,9 @@ export default defineComponent({
         IonSkeletonText,
         IonContent,
         IonHeader,
+        IonSearchbar,
         IonPage,
+        IonText,
         IonTitle,
         IonToolbar,
         IonInfiniteScroll,
@@ -95,6 +108,22 @@ export default defineComponent({
             this.isReady = true
             this.next = page.next
         },
+        onSearch: function (event: CustomEvent) {
+            const query = event.detail.value.toLowerCase()
+            if (!this.isReady || query.length == 0) {
+                return
+            }
+            const { findPlanets } = useSwapi()
+            this.planets = []
+            this.isReady = false
+            findPlanets(query).then(this.onRetrievedPage)
+        },
+        onCancelSearch: function () {
+            this.isReady = false
+            const { getPlanetsPage } = useSwapi()
+            getPlanetsPage().then(this.onRetrievedPage)
+        },
+
         onInfiniteScroll: function (event: InfiniteScrollCustomEvent) {
             if (this.next === null) {
                 event.target.complete()
