@@ -75,7 +75,6 @@ export function useSwapi() {
         if (!current.next || items.length >= size) {
             return { items, next: current.next } as Page<Type>
         }
-
         return axios.get<Type>(current.next).then((result) => {
             const next = result.data as ResultSet<Type>
             return getPageOfSize(next, size, items)
