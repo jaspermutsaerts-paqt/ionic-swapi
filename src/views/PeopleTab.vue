@@ -106,9 +106,6 @@ export default defineComponent({
     },
 
     methods: {
-        people() {
-            return people
-        },
         onRetrievedPage: function (page: Page<Person>) {
             this.people = this.people.concat(page.items)
             this.isReady = true
