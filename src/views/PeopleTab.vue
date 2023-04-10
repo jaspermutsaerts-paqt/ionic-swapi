@@ -6,6 +6,14 @@
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
+            <ion-header>
+                <ion-searchbar
+                    :debounce="1000"
+                    show-cancel-button="focus"
+                    @ionChange="onSearch"
+                    @ionCancel="onCancelSearch"
+                ></ion-searchbar>
+            </ion-header>
             <div v-if="isReady">
                 <ion-list :key="person.url" v-for="person in people">
                     <ion-item :router-link="`/people/${encodeURIComponent(person.url)}`">
@@ -18,6 +26,7 @@
                         <ion-label>{{ person.name }}</ion-label>
                     </ion-item>
                 </ion-list>
+                <ion-text v-if="people.length == 0" class="ion-padding-horizontal"> No results </ion-text>
                 <ion-infinite-scroll position="bottom" @ionInfinite="onInfiniteScroll">
                     <ion-infinite-scroll-content></ion-infinite-scroll-content>
                 </ion-infinite-scroll>
@@ -53,12 +62,15 @@ import {
     IonLabel,
     IonList,
     IonPage,
+    IonText,
+    IonSearchbar,
     IonSkeletonText,
     IonTitle,
     IonToolbar,
 } from '@ionic/vue'
 import { defineComponent } from 'vue'
 import { Page } from '@/types/Page'
+import { people } from 'ionicons/icons'
 
 export default defineComponent({
     components: {
@@ -69,7 +81,9 @@ export default defineComponent({
         IonSkeletonText,
         IonContent,
         IonHeader,
+        IonSearchbar,
         IonPage,
+        IonText,
         IonTitle,
         IonToolbar,
         IonInfiniteScroll,
@@ -92,11 +106,30 @@ export default defineComponent({
     },
 
     methods: {
+        people() {
+            return people
+        },
         onRetrievedPage: function (page: Page<Person>) {
             this.people = this.people.concat(page.items)
             this.isReady = true
             this.next = page.next
         },
+        onSearch: function (event: CustomEvent) {
+            const query = event.detail.value.toLowerCase()
+            if (!this.isReady || query.length == 0) {
+                return
+            }
+            const { findPeople } = useSwapi()
+            this.people = []
+            this.isReady = false
+            findPeople(query).then(this.onRetrievedPage)
+        },
+        onCancelSearch: function () {
+            this.isReady = false
+            const { getPeoplePage } = useSwapi()
+            getPeoplePage().then(this.onRetrievedPage)
+        },
+
         onInfiniteScroll: function (event: InfiniteScrollCustomEvent) {
             if (this.next === null) {
                 event.target.complete()
