@@ -10,9 +10,12 @@
         </ion-header>
         <ion-content align="center">
             <ion-card>
-                <div v-if="image">
-                    <img alt="Picture of {{person.name}}" :src="image" />
-                </div>
+                <img v-if="image" alt="Picture of {{person.name}}" :src="image" />
+                <img
+                    v-else
+                    alt="Silhouette of a person's head"
+                    src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                />
                 <ion-card-header>
                     <ion-card-title>{{ person.name }}</ion-card-title>
                     <ion-card-subtitle>Birth year: {{ person.birth_year }}</ion-card-subtitle>

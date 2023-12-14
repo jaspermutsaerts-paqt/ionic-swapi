@@ -1,6 +1,7 @@
 import { createApi } from 'unsplash-js'
 import { Random } from 'unsplash-js/dist/methods/photos/types'
 import { Person } from '@/types/Person'
+import { Planet } from '@/types/Planet'
 
 export function useImageApi() {
     const API_KEY = process.env.VUE_APP_UNSPLASH_API_KEY
@@ -18,7 +19,7 @@ export function useImageApi() {
     // TODO/clear: add cooldown in case we exceed rate limit
     let cooldown: Date | undefined
 
-    const getImage = (keyword: string) => {
+    const getImage = (keyword: string, topicIds: string[]) => {
         // TODO/clear: add caching to return the same image for the same keyword at least during session
 
         if (cooldown) {
@@ -29,7 +30,7 @@ export function useImageApi() {
             .getRandom({
                 query: keyword,
                 orientation: 'squarish',
-                topicIds: [TOPICS.FILM],
+                topicIds,
             })
             .then((result) => {
                 const { response } = result
@@ -44,10 +45,14 @@ export function useImageApi() {
 
     const getPersonImage = (person: Person) => {
         const keyword = 'Star+Wars person ' + person.name.replace(' ', '+')
-        return getImage(keyword)
+        return getImage(keyword, [TOPICS.FILM])
     }
+
+    const getPlanetImage = (planet: Planet) =>
+        getImage('Star+Wars planet ' + planet.name, [TOPICS.RENDERS_3D, TOPICS.FILM])
 
     return {
         getPersonImage,
+        getPlanetImage,
     }
 }

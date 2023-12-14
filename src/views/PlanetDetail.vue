@@ -10,6 +10,7 @@
         </ion-header>
         <ion-content :fullscreen="true">
             <ion-card>
+                <img v-if="image" alt="Picture of {{planet.name}}" :src="image" />
                 <ion-card-header>
                     <ion-card-title>{{ planet.name }}</ion-card-title>
                     <ion-card-subtitle
@@ -41,6 +42,7 @@ import {
 } from '@ionic/vue'
 import { useRoute } from 'vue-router'
 import { useSwapi } from '@/composables/useSwapi'
+import { useImageApi } from '@/composables/useImageApi'
 
 export default {
     components: {
@@ -59,18 +61,33 @@ export default {
     name: 'PlanetDetail',
 
     data() {
-        return { planet: [] }
+        return {
+            planet: [],
+            image: null,
+        }
     },
 
     setup() {
         const route = useRoute()
         const url = decodeURIComponent(route.params.url)
-        return { url }
+        const { getPlanet } = useSwapi()
+        const { getPlanetImage } = useImageApi()
+
+        return {
+            url,
+            getPlanet,
+            getPlanetImage,
+        }
     },
 
     mounted() {
-        const { getPlanet } = useSwapi()
-        getPlanet(this.url).then((planet) => (this.planet = planet))
+        this.getPlanet(this.url).then((planet) => {
+            this.planet = planet
+
+            return this.getPlanetImage(planet).then((image) => {
+                this.image = image
+            })
+        })
     },
 }
 </script>
