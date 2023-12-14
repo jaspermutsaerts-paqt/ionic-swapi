@@ -10,7 +10,9 @@
         </ion-header>
         <ion-content align="center">
             <ion-card>
-                <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+                <div v-if="image">
+                    <img alt="Picture of {{person.name}}" :src="image" />
+                </div>
                 <ion-card-header>
                     <ion-card-title>{{ person.name }}</ion-card-title>
                     <ion-card-subtitle>Birth year: {{ person.birth_year }}</ion-card-subtitle>
@@ -43,6 +45,7 @@ import {
 } from '@ionic/vue'
 import { useRoute } from 'vue-router'
 import { useSwapi } from '@/composables/useSwapi'
+import { useImageApi } from '@/composables/useImageApi'
 
 export default {
     components: {
@@ -64,19 +67,33 @@ export default {
     name: 'PersonDetail',
 
     data() {
-        return { person: [] }
+        return {
+            person: [],
+            image: null,
+        }
     },
 
     setup() {
         const route = useRoute()
         const url = decodeURIComponent(route.params.url)
-        return { url }
+        const { getPerson } = useSwapi()
+        const { getPersonImage } = useImageApi()
+
+        return {
+            url,
+            getPerson,
+            getPersonImage,
+        }
     },
 
     mounted() {
-        const { getPerson, findPerson } = useSwapi()
-        getPerson(this.url).then((person) => (this.person = person))
-        // findPerson('Luke Skywalker').then((person) => console.log('Found', person))
+        this.getPerson(this.url).then((person) => {
+            this.person = person
+
+            return this.getPersonImage(person).then((image) => {
+                this.image = image
+            })
+        })
     },
 }
 </script>

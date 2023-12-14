@@ -23,6 +23,7 @@
     "axios": "^1.2.3",
     "core-js": "^3.6.5",
     "ionicons": "^6.0.3",
+    "unsplash-js": "^7.0.18",
     "vue": "^3.2.21",
     "vue-router": "^4.0.12"
   },
