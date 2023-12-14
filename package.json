@@ -9,9 +9,9 @@
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
     "fix": "prettier --config .prettierrc.json 'src/**/*.ts' 'src/**/*.vue' --write"
-
   },
   "dependencies": {
+    "@capacitor/android": "4.6.2",
     "@capacitor/app": "4.1.1",
     "@capacitor/core": "4.6.2",
     "@capacitor/haptics": "4.1.0",

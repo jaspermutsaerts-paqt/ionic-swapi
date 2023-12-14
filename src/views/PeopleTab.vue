@@ -70,7 +70,6 @@ import {
 } from '@ionic/vue'
 import { defineComponent } from 'vue'
 import { Page } from '@/types/Page'
-import { people } from 'ionicons/icons'
 
 export default defineComponent({
     components: {
