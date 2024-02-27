@@ -20,8 +20,9 @@ export function useImageApi() {
 
     const getImage = (keyword: string, topicIds: string[]) => {
         if (cooldown) {
-            console.log('cooling down')
-            return Promise.reject('Cooling down until: ' + cooldown?.toISOString())
+            const reason = 'Cooling down until: ' + cooldown?.toISOString()
+            console.warn(reason)
+            return Promise.reject(reason)
         }
 
         console.log('get image', keyword)
@@ -38,6 +39,7 @@ export function useImageApi() {
             })
             .catch((reason) => {
                 // Just assume rate limit was the problem
+                console.log('Failed to get image', reason)
                 cooldown = new Date(new Date().getTime() + COOLDOWN_MINUTES * 60_000)
                 return Promise.reject('Cooling down until: ' + cooldown.toISOString())
             })
