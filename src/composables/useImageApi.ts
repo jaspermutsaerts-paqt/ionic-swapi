@@ -16,15 +16,15 @@ export function useImageApi() {
 
     const api = createApi({ accessKey: API_KEY })
 
-    // TODO/clear: add cooldown in case we exceed rate limit
     let cooldown: Date | undefined
 
     const getImage = (keyword: string, topicIds: string[]) => {
-        // TODO/clear: add caching to return the same image for the same keyword at least during session
-
         if (cooldown) {
+            console.log('cooling down')
             return Promise.reject('Cooling down until: ' + cooldown?.toISOString())
         }
+
+        console.log('get image', keyword)
 
         return api.photos
             .getRandom({
