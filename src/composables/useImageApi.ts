@@ -4,7 +4,7 @@ import { Person } from '@/types/Person'
 import { Planet } from '@/types/Planet'
 
 export function useImageApi() {
-    const API_KEY = process.env.VUE_APP_UNSPLASH_API_KEY
+    const ACCESS_KEY = process.env.VUE_APP_UNSPLASH_ACCESS_KEY
 
     const TOPICS = {
         FILM: 'Bm0tkMoExAg',
@@ -14,7 +14,7 @@ export function useImageApi() {
 
     const COOLDOWN_MINUTES = 2
 
-    const api = createApi({ accessKey: API_KEY })
+    const api = createApi({ accessKey: ACCESS_KEY })
 
     let cooldown: Date | undefined
 
@@ -24,8 +24,6 @@ export function useImageApi() {
             console.warn(reason)
             return Promise.reject(reason)
         }
-
-        console.log('get image', keyword)
 
         return api.photos
             .getRandom({
